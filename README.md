@@ -2,6 +2,8 @@
 
 A Spring Boot 3 / Java 17 movie ticket booking system: multiple cities, theaters, screens, and shows, with seat-level booking, time-bound holds, tiered pricing, discount codes, payment (mocked), cancellations with refunds, and non-blocking notifications. Built for a 48-hour SDE-2 take-home assignment.
 
+**Author**: Sujith Tenali <tsujithonline@gmail.com>
+
 Full design spec: [`movie-ticket-booking-spec.md`](movie-ticket-booking-spec.md). Implementation plan: [`PLAN.md`](PLAN.md).
 
 ## Overview & Architecture Decisions
