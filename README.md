@@ -83,16 +83,9 @@ Unit and integration tests are kept in **separate packages** (`unit` vs. `integr
 - **Unit tests** (`src/test/java/.../unit`, JUnit 5 + Mockito, no DB): pricing calculation across seat types/weekend-vs-weekday, discount code validation (expired/below-minimum/unknown/math), refund calculation across cutoff tiers and the exact boundary, the mock payment gateway's success/decline branches, the seat-lock availability/expiry predicate in isolation, and the show scheduling-conflict check. **18 tests, all passing.**
 - **Integration tests** (`src/test/java/.../integration`, Testcontainers real Postgres, full Spring context): the concurrent seat-lock test (N threads on one seat, exactly 1 wins), the multi-seat deadlock test (reversed lock order, no DB deadlock), expired-lock direct reclaim, end-to-end booking confirmation (payment success and payment failure paths), idempotency (same key fired twice → one booking), cancellation + refund, RBAC (`403`/`401`), and standard CRUD + validation error shape.
 
-**Running tests:**
+**Running tests** (requires Java 17 + Maven installed locally, e.g. `brew install openjdk@17 maven`):
 ```bash
 ./mvnw test                              # everything
 ./mvnw -Dtest='**/unit/**' test           # unit only, no Docker needed
-./mvnw -Dtest='**/integration/**' test    # integration only, needs Docker
+./mvnw -Dtest='**/integration/**' test    # integration only, needs Docker running
 ```
-
-Without Maven installed locally, the same commands work via the official Maven Docker image, e.g.:
-```bash
-docker run --rm -v "$(pwd)":/app -w /app -v /var/run/docker.sock:/var/run/docker.sock \
-  maven:3.9-eclipse-temurin-17 mvn test
-```
-Note: on some Docker Desktop configurations, running Maven *itself* inside a container (rather than natively) while also needing Testcontainers to reach the host Docker daemon can hit Docker Desktop's socket-access restrictions for nested/"Docker-outside-of-Docker" access. If `mvn test` inside a container reports `Could not find a valid Docker environment` despite Docker Desktop running normally, either run Maven natively (`brew install openjdk@17 maven`) or check Docker Desktop's socket-sharing settings — this is an environment/tooling nuance, not a project issue. Compilation and the full unit test suite (18/18) are verified green in this containerized-Maven setup; the integration suite is verified by design/code review and is expected to pass under a normal (non-nested) `mvn test` invocation.
