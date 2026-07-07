@@ -1,0 +1,31 @@
+spring:
+  application:
+    name: movietickets
+  datasource:
+    url: jdbc:postgresql://localhost:5432/movie_booking
+    username: booking_user
+    password: booking_pass
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+    open-in-view: false
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+
+booking:
+  lock-duration-minutes: 10
+  cancellation-min-hours-before-show: 1
+  reminder-window-hours: 24
+
+payment:
+  # deterministic mock-failure trigger — see README "Assumptions"
+  simulate-failure-amount-suffix: ".13"
+
+logging:
+  level:
+    com.example.movietickets: INFO
